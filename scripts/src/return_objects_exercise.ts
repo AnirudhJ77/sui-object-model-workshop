@@ -40,6 +40,8 @@ const main = async () => {
    * Create a new Transaction instance from the @mysten/sui/transactions module.
    */
 
+  const request = new Transaction();
+
   /**
    * Task 2:
    *
@@ -52,6 +54,10 @@ const main = async () => {
    * any arguments or type arguments.
    */
 
+  const createdNft = request.moveCall({
+    target: `${PACKAGE_ID}::sui_nft::new`,
+  });
+
   /**
    * Task 3:
    *
@@ -62,6 +68,7 @@ const main = async () => {
    * HINT: Use `suiAddress`` to transfer the object to your address.
    */
 
+  request.transferObjects([createdNft], request.pure.address(suiAddress));
 
   /**
    * Task 4:
@@ -70,6 +77,9 @@ const main = async () => {
    *
    * Print the result to the console.
    */
+
+  const response = await suiClient.signAndExecuteTransaction({ transaction: request, signer: keypair });
+  console.log(response);
 
 
   /**
